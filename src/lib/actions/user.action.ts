@@ -6,16 +6,48 @@ import { revalidatePath } from "next/cache"; // Updated import
 import User from "../../database/user.model";
 import Image from "../../database/image.model";
 import { connectToDatabase } from "../mongoose";
+import { IUser } from "../../database/user.model";
 
-import type {
-  CreateUserParams,
-  DeleteUserParams,
-//   GetAllUsersParams,
-  GetUserByIdParams,
-  UpdateUserParams,
-} from "./shared.types";
+/**
+ * Common interfaces used in actions
+ */
+interface ClerkId {
+  clerkId: string;
+}
 
-// const sortOptions = { joinedAt: 1 }; // Define your sorting options
+interface UserId {
+  userId: string;
+}
+
+interface Path {
+  path: string;
+}
+
+/**
+ * Interfaces for user actions
+ */
+export interface CreateUserParams extends ClerkId {
+  name: string;
+  username: string;
+  email: string;
+  picture: string;
+}
+
+export interface GetUserByIdParams extends UserId {}
+
+export interface UpdateUserParams extends ClerkId, Path {
+  updateData: Partial<IUser>;
+}
+
+export interface DeleteUserParams extends ClerkId {}
+
+export interface GetAllUsersParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
+
 
 export async function createUser(userData: CreateUserParams) {
   try {
