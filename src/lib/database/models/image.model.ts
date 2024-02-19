@@ -15,6 +15,6 @@ const ImageSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" }, // Reference to User model
 });
 
-const Image = models.Image || model<IImage>("Image", ImageSchema);
+const Image = models.Image || model("Image", ImageSchema);
 
 export default Image;
