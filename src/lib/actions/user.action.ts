@@ -3,174 +3,80 @@
 // user.actions.ts
 import { revalidatePath } from "next/cache"; // Updated import
 // import { FilterQuery } from "mongoose";
-import User from "../../database/user.model";
-import Image from "../../database/image.model";
-import { connectToDatabase } from "../mongoose";
-import { IUser } from "../../database/user.model";
+import User from "../database/models/user.model";
+// import Image from "../database/models/image.model";
+import { connectToDatabase } from "../database/index";
 
-/**
- * Common interfaces used in actions
- */
-interface ClerkId {
-  clerkId: string;
-}
+import { handleError } from '../utils'
 
-interface UserId {
-  userId: string;
-}
+import { CreateUserParams, UpdateUserParams } from '../../types'
 
-interface Path {
-  path: string;
-}
-
-/**
- * Interfaces for user actions
- */
-export interface CreateUserParams extends ClerkId {
-  name: string;
-  username: string;
-  email: string;
-  picture: string;
-}
-
-export interface GetUserByIdParams extends UserId {}
-
-export interface UpdateUserParams extends ClerkId, Path {
-  updateData: Partial<IUser>;
-}
-
-export interface DeleteUserParams extends ClerkId {}
-
-export interface GetAllUsersParams {
-  page?: number;
-  pageSize?: number;
-  filter?: string;
-  searchQuery?: string;
-}
-
-
-export async function createUser(userData: CreateUserParams) {
+export async function createUser(user: CreateUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase()
 
-    const newUser = await User.create(userData);
-
-    return newUser;
+    const newUser = await User.create(user)
+    return JSON.parse(JSON.stringify(newUser))
   } catch (error) {
-    console.error(error);
-    throw error;
+    handleError(error)
   }
 }
 
-export async function updateUser(params: UpdateUserParams) {
+export async function getUserById(userId: string) {
   try {
-    connectToDatabase();
+    await connectToDatabase()
 
-    const { clerkId, updateData, path } = params;
+    const user = await User.findById(userId)
 
-    const updatedUser = await User.findOneAndUpdate(
-      { clerkId },
-      updateData,
-      { new: true }
-    );
+    if (!user) throw new Error('User not found')
+    return JSON.parse(JSON.stringify(user))
+  } catch (error) {
+    handleError(error)
+  }
+}
 
-    if (!updatedUser) {
-      throw new Error("User not found");
+export async function updateUser(clerkId: string, user: UpdateUserParams) {
+  try {
+    await connectToDatabase()
+
+    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, { new: true })
+
+    if (!updatedUser) throw new Error('User update failed')
+    return JSON.parse(JSON.stringify(updatedUser))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export async function deleteUser(clerkId: string) {
+  try {
+    await connectToDatabase()
+
+    // Find user to delete
+    const userToDelete = await User.findOne({ clerkId })
+
+    if (!userToDelete) {
+      throw new Error('User not found')
     }
 
-    revalidatePath(path);
-    return updatedUser;
+    // Unlink relationships
+    // await Promise.all([
+    //   // Update the 'events' collection to remove references to the user
+    //   Event.updateMany(
+    //     { _id: { $in: userToDelete.events } },
+    //     { $pull: { organizer: userToDelete._id } }
+    //   ),
+
+    //   // Update the 'orders' collection to remove references to the user
+    //   Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }),
+    // ])
+
+    // Delete user
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id)
+    revalidatePath('/')
+
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null
   } catch (error) {
-    console.error(error);
-    throw error;
+    handleError(error)
   }
 }
-
-export async function deleteUser(params: DeleteUserParams) {
-  try {
-    connectToDatabase();
-
-    const { clerkId } = params;
-
-    const user = await User.findOneAndDelete({ clerkId });
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    await Image.deleteMany({ user: user._id });
-
-    const deletedUser = await User.findByIdAndDelete(user._id);
-
-    return deletedUser;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-export async function getUserById(params: GetUserByIdParams) {
-  try {
-    connectToDatabase();
-
-    const { userId } = params;
-
-    const user = await User.findOne({ clerkId: userId });
-
-    return user;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
-// export async function getAllUsers(params: GetAllUsersParams) {
-//   try {
-//     connectToDatabase();
-
-//     const { page = 1, pageSize = 10, searchQuery } = params;
-
-//     // Calculate the number of users to skip based on the page number and page size
-//     const skipAmount = (page - 1) * pageSize;
-
-//     const query: FilterQuery<typeof User> = {};
-
-//     if (searchQuery) {
-//       query.$or = [
-//         { name: { $regex: new RegExp(searchQuery, "i") } },
-//         { username: { $regex: new RegExp(searchQuery, "i") } },
-//       ];
-//     }
-
-//     const users = await User.find(query)
-//       .sort(sortOptions)
-//       .skip(skipAmount)
-//       .limit(pageSize);
-
-//     const totalUsers = await User.countDocuments(query);
-
-//     const isNext = totalUsers > skipAmount + users.length;
-
-//     return { users, isNext };
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// }
-
-// export async function getUserImages(params: GetUserByIdParams) {
-//   try {
-//     connectToDatabase();
-
-//     const { userId, page = 1, pageSize = 10 } = params;
-
-//     const userImages = await Image.find({ user: userId })
-//       .skip((page - 1) * pageSize)
-//       .limit(pageSize);
-
-//     return userImages;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// }

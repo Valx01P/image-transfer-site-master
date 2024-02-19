@@ -2,9 +2,9 @@
 
 // image.actions.ts
 import { NextApiRequest, NextApiResponse } from "next";
-import Image from "../../database/image.model";
-import User from "../../database/user.model";
-import { connectToDatabase } from "../mongoose";
+import Image from "../database/models/image.model";
+import User from "../database/models/user.model";
+import { connectToDatabase } from "../database/index";
 
 export const uploadImage = async (
   req: NextApiRequest,

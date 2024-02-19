@@ -6,6 +6,12 @@ export const headerLinks = [
       imageAlt: 'Home Icon'
     },
     {
+      label: 'Dashboard',
+      route: '/',
+      imagePath: '/shop-solid.svg',
+      imageAlt: 'Shop Icon'
+    },
+    {
       label: 'Upload',
       route: '/uploads/create',
       imagePath: '/cloud-arrow-up-solid.svg',
