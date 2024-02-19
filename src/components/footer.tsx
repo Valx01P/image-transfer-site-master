@@ -1,9 +1,18 @@
-import React from 'react'
+import Image from "next/image"
+import Link from "next/link"
 
-type Props = {}
-
-const footer = (props: Props) => {
+const Footer = () => {
   return (
-    <div>footer</div>
+    <footer className="border-purple-900  border-t-[1px]">
+      <div className="container mx-auto flex items-center justify-between lg:mx-auto md:px-10 xl:px-0 w-full flex-col gap-4 p-5 text-center sm:flex-row">
+        <Link href='/' className="flex flex-center">
+          <Image src="/logo.png" width={105} height={43} alt="" />
+        </Link>
+
+        <p><strong>2024 iServer. All Rights reserved.</strong></p>
+      </div>
+    </footer>
   )
 }
+
+export default Footer
