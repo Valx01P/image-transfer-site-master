@@ -1,102 +1,64 @@
 "use server";
 
 // image.actions.ts
-import { NextApiRequest, NextApiResponse } from "next";
+import { revalidatePath } from 'next/cache'
 import Image from "../database/models/image.model";
 import User from "../database/models/user.model";
 import { connectToDatabase } from "../database/index";
 
-export const uploadImage = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+import { handleError } from '../utils'
+
+import {
+  CreateImageParams,
+  DeleteImageParams,
+  GetImagesByUserParams,
+} from '../../types'
+
+
+// CREATE
+export async function createImage({ userId, image, path }: CreateImageParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase()
 
-    const userId = req.body.userId;
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
 
-    const user = await User.findById(userId);
+    const newImage = await Image.create({ ...image, user: userId })
+    revalidatePath(path)
 
-    if (!user) {
-      res.status(404).json({ error: "User not found" });
-      return;
-    }
-
-    // Handle image upload and save relevant information in the database
-    const { filename, path } = req.body; // Assuming you handle file uploads
-
-    const newImage = new Image({
-      user: userId,
-      filename,
-      path,
-    });
-
-    await newImage.save();
-
-    // Associate the image with the user
-    user.images.push(newImage._id);
-    await user.save();
-
-    res.status(201).json(newImage);
+    return JSON.parse(JSON.stringify(newImage))
   } catch (error) {
-    console.error("Error uploading image:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    handleError(error)
   }
-};
+}
 
-export const deleteImage = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+// DELETE
+export async function deleteImage({ imageId, path }: DeleteImageParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase()
 
-    const imageId = req.query.id as string;
-
-    await Image.findByIdAndDelete(imageId);
-
-    res.status(204).end();
+    const deletedImage = await Image.findByIdAndDelete(imageId)
+    if (deletedImage) revalidatePath(path)
   } catch (error) {
-    console.error("Error deleting image:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    handleError(error)
   }
-};
+}
 
-export const getImageById = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+// GET IMAGES BY USER
+export async function getImagesByUser({ userId }: GetImagesByUserParams) {
   try {
-    connectToDatabase();
+    await connectToDatabase()
 
-    const imageId = req.query.id as string;
+    // Find user by ID
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
 
-    const image = await Image.findById(imageId);
+    // Find all images associated with the user
+    const images = await Image.find({ user: userId })
 
-    if (!image) {
-      res.status(404).json({ error: "Image not found" });
-      return;
-    }
-
-    res.status(200).json(image);
+    // Return the images
+    return images.map((image) => JSON.parse(JSON.stringify(image)))
   } catch (error) {
-    console.error("Error getting image by ID:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    handleError(error)
   }
-};
-
-export const getAllImages = async (
-  _req: NextApiRequest,
-  res: NextApiResponse
-) => {
-  try {
-    connectToDatabase();
-
-    const images = await Image.find();
-
-    res.status(200).json(images);
-  } catch (error) {
-    console.error("Error getting all images:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+}
