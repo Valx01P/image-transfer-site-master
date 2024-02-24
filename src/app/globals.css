@@ -74,3 +74,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.link-blue {
+  color: #3498db;
+}
+
+.link-blue:hover {
+  text-decoration: underline;
+}

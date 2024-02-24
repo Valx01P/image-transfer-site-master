@@ -1,3 +1,4 @@
+
 export const headerLinks = [
     {
       label: 'Home',
@@ -7,19 +8,19 @@ export const headerLinks = [
     },
     {
       label: 'Dashboard',
-      route: '/',
-      imagePath: '/shop-solid.svg',
-      imageAlt: 'Shop Icon'
+      route: '/dashboard',
+      imagePath: '/image-solid.svg',
+      imageAlt: 'Image Icon'
     },
     {
       label: 'Upload',
-      route: '/uploads/create',
+      route: '/dashboard',
       imagePath: '/cloud-arrow-up-solid.svg',
       imageAlt: 'Upload Icon'
     },
     {
       label: 'My Profile',
-      route: '/profile',
+      route: '/user-profile',
       imagePath: '/user-solid.svg',
       imageAlt: 'User Icon'
     },

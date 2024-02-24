@@ -28,12 +28,13 @@ export async function getUserById(userId: string) {
 
     const user = await User.findById(userId)
 
-    if (!user) throw new Error('User not found')
-    return JSON.parse(JSON.stringify(user))
+    return user ? JSON.parse(JSON.stringify(user)) : null;
   } catch (error) {
     handleError(error)
+    return null; // Return null instead of throwing an error
   }
 }
+
 
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {

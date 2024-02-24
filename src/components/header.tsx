@@ -2,6 +2,8 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import Image from "next/image"
 import Link from 'next/link';
 import MobileNav from "./MobileNav";
+import HeaderRightLinks from "./HeaderRightLinks";
+
 
 export default async function Header() {
 
@@ -12,7 +14,7 @@ export default async function Header() {
 
         <div className="flex items-center w-1/3 gap-5 justify-start">
           <MobileNav />
-          <Link href='/' className='flex text-black gap-1 max-md:hidden'>
+          <Link href='/about' className='flex text-black gap-1 max-md:hidden'>
             <Image src="/circle-question-regular.svg" width={19} height={16} alt="" />
             About
           </Link>
@@ -29,31 +31,8 @@ export default async function Header() {
 
 
         <div className='flex items-center w-1/3 justify-end'>
-            <div className='flex gap-5 items-center'>
-              <Link href='/upload' className='flex text-black gap-1 max-md:hidden'>
-                <Image src="/cloud-arrow-up-solid.svg" width={19} height={16} alt="bruh"/>
-                <span className="max-lg:hidden">Upload</span>
-              </Link>
-
-              <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-              </SignedIn>
-
-              <SignedOut>
-                <Link href='/sign-in' className='flex text-black gap-1'>
-                  <Image src="/right-to-bracket-solid.svg" width={19} height={16} alt="bruh"/>
-                  <span className="max-lg:hidden whitespace-nowrap">Sign in</span>
-                </Link>
-                <Link href='/sign-up' className="max-md:hidden">
-                  <button className='px-3 py-1.5 bg-purple-900 rounded-md text-white whitespace-nowrap'>
-                    Create account
-                  </button>
-                </Link>
-              </SignedOut>
-            </div>
+          <HeaderRightLinks />
         </div>
-
-
       </nav>
     </header>
   );
