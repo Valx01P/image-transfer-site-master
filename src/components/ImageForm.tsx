@@ -101,7 +101,7 @@ const ImageForm = ({ userId }: ImageFormProps) => {
         className="button col-span-2 w-1/2 max-md:w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
         >
         {form.formState.isSubmitting ? (
-            'Submitting...'
+            'Uploading...'
         ): `Save Uploaded Image`}
         </Button>
       </form>

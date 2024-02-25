@@ -2,9 +2,8 @@
 
 // user.actions.ts
 import { revalidatePath } from "next/cache"; // Updated import
-// import { FilterQuery } from "mongoose";
 import User from "../database/models/user.model";
-// import Image from "../database/models/image.model";
+import Image from "../database/models/image.model";
 import { connectToDatabase } from "../database/index";
 
 import { handleError } from '../utils'
@@ -51,33 +50,32 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
 
 export async function deleteUser(clerkId: string) {
   try {
-    await connectToDatabase()
+    await connectToDatabase();
 
     // Find user to delete
-    const userToDelete = await User.findOne({ clerkId })
+    const userToDelete = await User.findOne({ clerkId });
 
     if (!userToDelete) {
-      throw new Error('User not found')
+      throw new Error("User not found");
     }
 
-    // Unlink relationships
-    // await Promise.all([
-    //   // Update the 'events' collection to remove references to the user
-    //   Event.updateMany(
-    //     { _id: { $in: userToDelete.events } },
-    //     { $pull: { organizer: userToDelete._id } }
-    //   ),
+    // Find and delete all images associated with the user
+    const deleteImagesResult = await Image.deleteMany({ user: userToDelete._id });
 
-    //   // Update the 'orders' collection to remove references to the user
-    //   Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }),
-    // ])
+    console.log('Delete Images Result:', deleteImagesResult);
 
     // Delete user
-    const deletedUser = await User.findByIdAndDelete(userToDelete._id)
-    revalidatePath('/')
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+    
+    console.log('Deleted User:', deletedUser);
 
-    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null
+    // Revalidate path only if both user and images are deleted
+    if (deletedUser) {
+      revalidatePath('/');
+    }
+
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {
-    handleError(error)
+    handleError(error);
   }
 }

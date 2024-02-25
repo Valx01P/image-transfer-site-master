@@ -14,8 +14,7 @@ const Dashboard = async () => {
 //   console.log(user);
 
   return (
-    <section className="h-auto w-full flex flex-col text-black bg-blue">
-        
+    <section className="h-auto w-full flex flex-col text-black bg-blue absolute top-0">
         
         <div className="container h-40 flex flex-row mt-2.5">
             <div className=" flex">
@@ -43,7 +42,6 @@ const Dashboard = async () => {
         <div className="container mt-2.5 flex text-black text-[26px]">
             <h1>{user?.firstName}&apos;s Images</h1>
         </div>
-
 
         <div className="container flex text-black text-[26px]">
             <div className="flex justify-center align-middle flex-col">

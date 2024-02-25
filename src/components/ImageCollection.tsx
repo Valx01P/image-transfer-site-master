@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { IImage } from '../lib/database/models/image.model'
+import { DeleteConfirmation } from './DeleteConfirmation'
 
 type ImageCollectionProps = {
   data: IImage[];
@@ -55,7 +56,7 @@ const ImageCollection = ({ data }: ImageCollectionProps) => {
                   />
 
                   {/* Delete image */}
-                  <Image src='/trash.svg' width={19} height={16} alt='delete image' />
+                  <DeleteConfirmation imageId={image._id} />
                 </div>
               </div>
             ))}
