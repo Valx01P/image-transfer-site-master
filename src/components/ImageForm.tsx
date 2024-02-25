@@ -64,7 +64,8 @@ const ImageForm = ({ userId }: ImageFormProps) => {
   
       if (newImage) {
         form.reset();
-        router.push(`/`);
+        setFiles([]);
+        router.push(`/dashboard`);
       }
     } catch (imageError) {
       console.error('Error creating image:', imageError);
@@ -74,7 +75,7 @@ const ImageForm = ({ userId }: ImageFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="items-center flex flex-col gap-5 justify-center">
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
               control={form.control}
@@ -94,14 +95,15 @@ const ImageForm = ({ userId }: ImageFormProps) => {
             />
         </div>
         <Button 
-          type="submit"
-          size="lg"
-          disabled={form.formState.isSubmitting}
-          className="button col-span-2 w-full"
+        type="submit"
+        size="lg"
+        disabled={form.formState.isSubmitting || files.length < 1}
+        className="button col-span-2 w-1/2 max-md:w-full bg-purple-900 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-150 ease-in-out"
         >
-          {form.formState.isSubmitting ? (
+        {form.formState.isSubmitting ? (
             'Submitting...'
-          ): `Image Upload`}</Button>
+        ): `Save Uploaded Image`}
+        </Button>
       </form>
     </Form>
   )

@@ -3,10 +3,14 @@ import Image from 'next/image';
 import { currentUser } from "@clerk/nextjs";
 import UploadDropDown from "../../../components/UploadDropDown";
 // import { getUserById } from "../../../lib/actions/user.action";
+import { getImagesByUser } from "../../../lib/actions/image.action";
+import ImageCollection from "../../../components/ImageCollection";
 
 const Dashboard = async () => {
   const user = await currentUser();
+  const userId: string = user?.publicMetadata.userId as string;
 
+  const images = await getImagesByUser({ userId });
 //   console.log(user);
 
   return (
@@ -63,30 +67,11 @@ const Dashboard = async () => {
                     Oldest
                 </div>
                 <UploadDropDown />
-                {/* <div className='text-[16px] flex gap-1 '>
-                <Image src="/cloud-arrow-up-solid.svg" width={16} height={13} alt="edit"/>
-                    Upload image
-                </div> */}
             </div>
         </div>
-
-
-        <div className="container flex text-black text-[26px] my-2">
-            <div className="grid grid-cols-4 grid-flow-row gap-0.5 max-md:grid-cols-3 max-sm:grid-cols-2">
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-                <Image src="/placeholder.jpg" width={327} height={327} alt="image"/>
-
-            </div>
-        </div>
-
-
+        <ImageCollection
+          data={images?.data ?? []}
+         />
     </section>
   )
 }

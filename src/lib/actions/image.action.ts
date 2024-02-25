@@ -53,18 +53,21 @@ export async function deleteImage({ imageId, path }: DeleteImageParams) {
 // GET IMAGES BY USER
 export async function getImagesByUser({ userId }: GetImagesByUserParams) {
   try {
-    await connectToDatabase()
+    await connectToDatabase();
 
     // Find user by ID
-    const user = await User.findById(userId)
-    if (!user) throw new Error('User not found')
+    const user = await User.findById(userId);
+    if (!user) throw new Error('User not found');
 
     // Find all images associated with the user
-    const images = await Image.find({ user: userId })
+    const images = await Image.find({ user: userId });
 
-    // Return the images
-    return images.map((image) => JSON.parse(JSON.stringify(image)))
+    // Return the images in a variable called 'data'
+    const data = images.map((image) => JSON.parse(JSON.stringify(image)));
+    
+    return { data };
   } catch (error) {
-    handleError(error)
+    handleError(error);
+    return { data: null };
   }
 }
