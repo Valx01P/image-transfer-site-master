@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from 'next/image';
-import { auth, currentUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs";
 import UploadDropDown from "../../../components/UploadDropDown";
 // import { getUserById } from "../../../lib/actions/user.action";
 
 const Dashboard = async () => {
   const user = await currentUser();
-  console.log(user);
+
+//   console.log(user);
 
   return (
     <section className="h-auto w-full flex flex-col text-black bg-blue">

@@ -37,3 +37,7 @@ export const headerLinks = [
       imageAlt: '</> Icon'
     }
   ]
+
+  export const imageDefaultValues = {
+    imageUrl: '',
+  }

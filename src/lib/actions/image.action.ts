@@ -18,17 +18,23 @@ import {
 // CREATE
 export async function createImage({ userId, image, path }: CreateImageParams) {
   try {
-    await connectToDatabase()
+    await connectToDatabase();
 
-    const user = await User.findById(userId)
-    if (!user) throw new Error('User not found')
+    // Find user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-    const newImage = await Image.create({ ...image, user: userId })
-    revalidatePath(path)
+    // Create image with user reference
+    const newImage = await Image.create({ ...image, user: userId });
+    revalidatePath(path);
 
-    return JSON.parse(JSON.stringify(newImage))
+    return JSON.parse(JSON.stringify(newImage));
   } catch (error) {
-    handleError(error)
+    handleError(error);
+    console.log("bruh");
+    return null;
   }
 }
 

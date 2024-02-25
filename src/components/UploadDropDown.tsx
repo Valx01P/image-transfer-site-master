@@ -8,10 +8,13 @@ import {
   } from "@/components/ui/sheet"
   import Image from "next/image"
 import { Separator } from "@/components/ui/separator"
-import FileUploader from "./FileUploader"
+import { currentUser } from "@clerk/nextjs";
+import ImageForm from "./ImageForm";
 
-const UploadDropDown = () => {
-
+const UploadDropDown = async () => {
+    const user = await currentUser();
+    const userId = user?.publicMetadata.userId;  
+  
     return (
         <Sheet>
           <SheetTrigger className="align-middle">
@@ -28,7 +31,7 @@ const UploadDropDown = () => {
               height={43}
             />
             <Separator className="border border-gray-50" />
-            <FileUploader />
+            <ImageForm userId={userId} />
           </SheetContent>
         </Sheet>
 
