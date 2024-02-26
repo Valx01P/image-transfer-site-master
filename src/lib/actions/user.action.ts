@@ -66,13 +66,9 @@ export async function deleteUser(clerkId: string) {
 
     // Delete user
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
-    
-    console.log('Deleted User:', deletedUser);
+    revalidatePath('/');
 
-    // Revalidate path only if both user and images are deleted
-    if (deletedUser) {
-      revalidatePath('/');
-    }
+    console.log('Deleted User:', deletedUser);
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {

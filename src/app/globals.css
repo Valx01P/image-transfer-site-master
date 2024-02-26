@@ -97,3 +97,20 @@
   transition: transform 0.5s ease-in-out;
   transform: scale(1.1); /* Adjust the scale factor as needed */
 }
+
+/*sign in*/
+.cl-internal-b3fm6y {
+  background-color: rgb(156 163 175);
+}
+
+.cl-formButtonPrimary {
+  background-color: rgb(156 163 175);
+}
+
+.cl-formButtonPrimary:hover {
+  background-color: rgb(146, 152, 161);
+}
+
+
+/*sign up*/
+

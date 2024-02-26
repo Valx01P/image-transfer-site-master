@@ -2,16 +2,26 @@ import Link from "next/link";
 import Image from 'next/image';
 import { currentUser } from "@clerk/nextjs";
 import UploadDropDown from "../../../components/UploadDropDown";
-// import { getUserById } from "../../../lib/actions/user.action";
 import { getImagesByUser } from "../../../lib/actions/image.action";
 import ImageCollection from "../../../components/ImageCollection";
 
 const Dashboard = async () => {
   const user = await currentUser();
+
+  if (!user) {
+    return (
+        <div>
+            <h1>Error accessing current user, try again</h1>
+            <Link href='/'>
+                <button>Try again</button>
+            </Link>
+        </div>
+    )
+  }
+
   const userId: string = user?.publicMetadata.userId as string;
 
   const images = await getImagesByUser({ userId });
-//   console.log(user);
 
   return (
     <section className="h-auto w-full flex flex-col text-black bg-blue absolute top-0">
@@ -25,6 +35,7 @@ const Dashboard = async () => {
                 width={160}
                 height={160}
                 className="rounded-full"
+                placeholder="empty"
                 />
                 </Link>
             </div>
@@ -52,6 +63,7 @@ const Dashboard = async () => {
                 width={32}
                 height={32}
                 className="rounded-sm"
+                placeholder="empty"
                 />
                 </Link>
             </div>
