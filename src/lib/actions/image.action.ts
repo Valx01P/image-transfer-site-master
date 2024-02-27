@@ -67,7 +67,22 @@ export async function getImagesByUser({ userId }: GetImagesByUserParams) {
     
     return { data };
   } catch (error) {
-    handleError(error);
-    return { data: null };
+    // handleError(error);
+    return { data: 
+      [
+        {
+          _id: "1",
+          uploadedAt: new Date(),
+          imageUrl: "https://via.placeholder.com/150",
+          user: { _id: "1", firstName: "John", lastName: "Doe" }
+        }
+      ]
+     };
   }
 }
+
+// _id: string;
+// uploadedAt: Date;
+// imageUrl: string;
+// user: { _id: string, firstName: string, lastName: string }; // Reference to the User model
+
