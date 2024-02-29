@@ -16,10 +16,14 @@ const ImageCollection = ({ data }: ImageCollectionProps) => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       console.log('Image URL copied to clipboard:', text);
-      // You can provide feedback to the user, such as a toast message or visual indicator
     }).catch((error) => {
       console.error('Error copying to clipboard:', error);
     });
+  };
+
+  const formatDate = (dateString: string) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
   return (
@@ -57,6 +61,9 @@ const ImageCollection = ({ data }: ImageCollectionProps) => {
 
                   {/* Delete image */}
                   <DeleteConfirmation imageId={image._id} />
+                </div>
+                <div className='absolute bottom-0 text-center text-[16px] p-2 text-black bg-gray-200 opacity-70'>
+                  <p className='text-center text-[16px]'>Uploaded at {formatDate(image.uploadedAt)}</p>
                 </div>
               </div>
             ))}

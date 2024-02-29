@@ -68,10 +68,10 @@ const Dashboard = async () => {
                 </Link>
             </div>
             <div className="flex justify-center items-center gap-5 pl-5">
-                <div className='text-[16px] flex gap-1'>
+                {/* <div className='text-[16px] flex gap-1'>
                 <Image src="/clock-rotate-left-solid.svg" width={16} height={13} alt="edit"/>
                     Most recent
-                </div>
+                </div> */}
                 <div className='text-[16px] flex gap-1 '>
                 <Image src="/backward-fast-solid.svg" width={16} height={13} alt="edit"/>
                     Oldest

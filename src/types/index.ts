@@ -15,8 +15,6 @@ export type CreateUserParams = {
     photo: string
   }
 
-  //
-
   // ====== IMAGE PARAMS
 export type CreateImageParams = {
     userId: string
