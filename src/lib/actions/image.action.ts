@@ -33,7 +33,6 @@ export async function createImage({ userId, image, path }: CreateImageParams) {
     return JSON.parse(JSON.stringify(newImage));
   } catch (error) {
     handleError(error);
-    console.log("bruh");
     return null;
   }
 }

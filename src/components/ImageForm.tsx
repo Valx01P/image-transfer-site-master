@@ -27,7 +27,7 @@ const ImageForm = ({ userId }: ImageFormProps) => {
   const initialValues = imageDefaultValues;
 
   const { startUpload } = useUploadThing('imageUploader')
-  console.log(userId)
+  // console.log(userId)
 
   const form = useForm<z.infer<typeof imageFormSchema>>({
     resolver: zodResolver(imageFormSchema),
@@ -37,7 +37,7 @@ const ImageForm = ({ userId }: ImageFormProps) => {
 
   async function onSubmit(values: z.infer<typeof imageFormSchema>) {
     let uploadedImageUrl = values.imageUrl;
-    console.log(userId)
+    // console.log(userId)
 
   
     if (files.length > 0) {

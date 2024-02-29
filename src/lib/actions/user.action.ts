@@ -62,13 +62,13 @@ export async function deleteUser(clerkId: string) {
     // Find and delete all images associated with the user
     const deleteImagesResult = await Image.deleteMany({ user: userToDelete._id });
 
-    console.log('Delete Images Result:', deleteImagesResult);
+    // console.log('Delete Images Result:', deleteImagesResult);
 
     // Delete user
     const deletedUser = await User.findByIdAndDelete(userToDelete._id);
     revalidatePath('/');
 
-    console.log('Deleted User:', deletedUser);
+    // console.log('Deleted User:', deletedUser);
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {
