@@ -21,9 +21,10 @@ const ImageCollection = ({ data }: ImageCollectionProps) => {
     });
   };
 
-  const formatDate = (dateString: string) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+  const formatDate = (date: Date | string) => {
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = new Date(date).toLocaleDateString('en-US', options);
+    return formattedDate;
   };
 
   return (
